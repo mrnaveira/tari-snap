@@ -42,11 +42,14 @@ function Balances() {
                 });
             }
 
-            if (!data || !data.balances) {
+            if (!data || !data.resources) {
                 return [];  
             }
 
-            return data.balances;
+            let fungibles = data.resources
+                .filter(r => r.type === 'fungible' || r.type === 'confidential');
+
+            return fungibles;
         } catch (e) {
             console.error(e);
             metamaskDispatch({ type: MetamaskActions.SetError, payload: e });
@@ -64,7 +67,7 @@ function Balances() {
         }
 
         // we keep polling for balances to keep them updated
-        setTimeout(async () => { await refreshAccountBalances() }, 4000);
+        setTimeout(async () => { await refreshAccountBalances() }, 5000);
     }
 
     useEffect(() => {
@@ -96,7 +99,7 @@ function Balances() {
     };
 
     const handleGetTestCoinsClick = async () => {
-        await getFreeTestCoins(1000, 1);
+        await getFreeTestCoins(100000, 1000);
     };
 
     return (
